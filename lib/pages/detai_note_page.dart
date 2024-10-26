@@ -1,45 +1,54 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class DetailNotePage extends StatelessWidget {
   final Map<String, dynamic> note;
+  final Function onUpdate;
 
-  const DetailNotePage({super.key, required this.note});
+  const DetailNotePage({Key? key, required this.note, required this.onUpdate})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController titleController =
+        TextEditingController(text: note['title']);
+    final TextEditingController contentController =
+        TextEditingController(text: note['content']);
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        title: Text('Edit Note'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () {
+              // Logic to update note in Firestore
+              FirebaseFirestore.instance
+                  .collection('notes')
+                  .doc(note['id'])
+                  .update({
+                'title': titleController.text,
+                'content': contentController.text,
+              });
+              onUpdate(); // Refresh notes list
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              note['title'],
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            TextField(
+              controller: titleController,
+              decoration: InputDecoration(labelText: 'Title'),
             ),
-            const SizedBox(height: 20),
-            if (note['isTask'])
-              ...note['content'].map<Widget>((task) {
-                bool isCompleted = note['completedTasks'].contains(task);
-                return Row(
-                  children: [
-                    Checkbox(value: isCompleted, onChanged: (val) {}),
-                    Text(task),
-                  ],
-                );
-              }).toList()
-            else
-              Text(note['content']),
+            TextField(
+              controller: contentController,
+              decoration: InputDecoration(labelText: 'Content'),
+              maxLines: 5,
+            ),
           ],
         ),
       ),

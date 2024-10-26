@@ -1,32 +1,18 @@
 import 'package:flutter/material.dart';
 
-class AddNotePage extends StatefulWidget {
+class AddNotePage extends StatelessWidget {
   final Function(String, String) onSave;
 
-  const AddNotePage({super.key, required this.onSave});
-
-  @override
-  _AddNotePageState createState() => _AddNotePageState();
-}
-
-class _AddNotePageState extends State<AddNotePage> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
+  const AddNotePage({Key? key, required this.onSave}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController contentController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title:
-            const Text('Add New Note', style: TextStyle(color: Colors.black)),
+        title: Text('Add New Note'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -34,26 +20,19 @@ class _AddNotePageState extends State<AddNotePage> {
           children: [
             TextField(
               controller: titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(),
-              ),
+              decoration: InputDecoration(labelText: 'Title'),
             ),
-            const SizedBox(height: 20),
             TextField(
               controller: contentController,
-              decoration: const InputDecoration(
-                labelText: 'Content',
-                border: OutlineInputBorder(),
-              ),
+              decoration: InputDecoration(labelText: 'Content'),
               maxLines: 5,
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                widget.onSave(titleController.text, contentController.text);
+                onSave(titleController.text, contentController.text);
               },
-              child: const Text('Save'),
+              child: Text('Save'),
             ),
           ],
         ),

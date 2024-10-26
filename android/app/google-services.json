@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "474591967635",
+    "project_id": "intermediate-testing-36064",
+    "storage_bucket": "intermediate-testing-36064.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:474591967635:android:cefebdc994678f97efd066",
+        "android_client_info": {
+          "package_name": "com.example.intermediate_mobile_amcc24"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsumOteb2WpdfSTBGdlzNqTN0g-ReHsec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
