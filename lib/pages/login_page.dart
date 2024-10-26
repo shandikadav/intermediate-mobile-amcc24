@@ -122,7 +122,7 @@ class LoginPage extends StatelessWidget {
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () {
-                              context.read().add(
+                              context.read<AuthBloc>().add(
                                     AuthEventLogin(
                                       emailController.text,
                                       passwordController.text,

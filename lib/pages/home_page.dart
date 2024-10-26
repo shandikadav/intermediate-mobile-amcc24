@@ -1,68 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:intermediate_mobile_amcc24/pages/add_note_page.dart';
-import 'package:intermediate_mobile_amcc24/pages/detai_note_page.dart';
 import 'package:intermediate_mobile_amcc24/shared/themes/theme.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> notes = [
-    {
-      'date': '28 May',
-      'title': 'Task Management App Ui Design',
-      'content':
-          'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used.',
-      'status': 'Just Now',
-      'isTask': false,
-    },
-    {
-      'date': '12 May',
-      'title': 'Shopping List',
-      'content': ['Apple', 'Mango Juice', 'Banana 5 pcs with', 'ButterMilk'],
-      'status': '1h ago',
-      'isTask': true,
-      'completedTasks': ['Apple'],
-    }
-  ];
+  List<Map<String, dynamic>> notes = [];
 
-  void addNewNote(String title, String content) {
-    setState(() {
-      notes.add({
-        'date': 'Today',
-        'title': title,
-        'content': content,
-        'status': 'Just Now',
-        'isTask': false,
-      });
-    });
-  }
-
-  void openNotePage(BuildContext context, Map<String, dynamic> note) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DetailNotePage(note: note),
-      ),
-    );
-  }
-
-  void openAddNotePage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AddNotePage(
-          onSave: (String title, String content) {
-            addNewNote(title, content);
-            Navigator.pop(context);
-          },
-        ),
-      ),
-    );
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -70,115 +21,75 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        elevation: 0,
         title: Text(
           'Notes App',
-          style: TextStyle(
-            color: whiteColor,
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: whiteColorTextStyle,
         ),
         actions: [
           IconButton(
             icon: Icon(
-              Icons.filter_list,
+              Icons.logout,
               color: whiteColor,
             ),
             onPressed: () {},
           ),
         ],
       ),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search Here',
-                  prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
-                  filled: true,
-                  fillColor: Colors.grey[200],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: notes.isEmpty
+            ? Center(
+                child: Text(
+                  'Belum ada note',
+                  style: blackColorTextStyle,
                 ),
-              ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: notes.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () => openNotePage(context, notes[index]),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        elevation: 2,
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                notes[index]['date'],
-                                style: const TextStyle(
-                                  color: Colors.orange,
-                                  fontWeight: FontWeight.bold,
-                                ),
+              )
+            : GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Menampilkan 2 item per baris
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: notes.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {},
+                    child: Card(
+                      margin: EdgeInsets.zero,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              notes[index]['title'],
+                              style: blackColorTextStyle.copyWith(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
-                              const SizedBox(height: 5),
-                              Text(
-                                notes[index]['title'],
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              notes[index]['content'],
+                              style: blackColorTextStyle.copyWith(
+                                fontSize: 12,
                               ),
-                              const SizedBox(height: 5),
-                              if (notes[index]['isTask'])
-                                ...notes[index]['content'].map<Widget>((task) {
-                                  bool isCompleted = notes[index]
-                                          ['completedTasks']
-                                      .contains(task);
-                                  return Row(
-                                    children: [
-                                      Checkbox(
-                                          value: isCompleted,
-                                          onChanged: (val) {}),
-                                      Text(task),
-                                    ],
-                                  );
-                                }).toList()
-                              else
-                                Text(
-                                  notes[index]['content'],
-                                  style: const TextStyle(color: Colors.black54),
-                                ),
-                              const SizedBox(height: 5),
-                              Text(
-                                notes[index]['status'],
-                                style: const TextStyle(color: Colors.green),
-                              ),
-                            ],
-                          ),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
-        ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => openAddNotePage(context),
         backgroundColor: primaryColor,
+        onPressed: () {},
         child: Icon(
           Icons.add,
           color: whiteColor,

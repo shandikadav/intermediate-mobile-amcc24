@@ -1,59 +1,60 @@
-import 'package:flutter/material.dart';
 
-class AddNotePage extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:intermediate_mobile_amcc24/shared/themes/theme.dart';
+
+class AddNotePage extends StatelessWidget {
   final Function(String, String) onSave;
 
-  const AddNotePage({super.key, required this.onSave});
-
-  @override
-  _AddNotePageState createState() => _AddNotePageState();
-}
-
-class _AddNotePageState extends State<AddNotePage> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
+  const AddNotePage({Key? key, required this.onSave}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController titleController = TextEditingController();
+    final TextEditingController contentController = TextEditingController();
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        backgroundColor: primaryColor,
+        title: Text(
+          'Tambah Catatan',
+          style: whiteColorTextStyle,
         ),
-        title:
-            const Text('Add New Note', style: TextStyle(color: Colors.black)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
+        child: ListView(
           children: [
             TextField(
               controller: titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: 'Judul',
+                labelStyle: blackColorTextStyle.copyWith(
+                  fontWeight: FontWeight.w100,
+                ),
               ),
             ),
-            const SizedBox(height: 20),
             TextField(
               controller: contentController,
-              decoration: const InputDecoration(
-                labelText: 'Content',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: 'Note',
+                labelStyle: blackColorTextStyle.copyWith(
+                  fontWeight: FontWeight.w100,
+                ),
               ),
               maxLines: 5,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 32),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: primaryColor,
+              ),
               onPressed: () {
-                widget.onSave(titleController.text, contentController.text);
+                onSave(titleController.text, contentController.text);
               },
-              child: const Text('Save'),
+              child: Text(
+                'Simpan',
+                style: whiteColorTextStyle,
+              ),
             ),
           ],
         ),
