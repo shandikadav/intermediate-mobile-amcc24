@@ -16,6 +16,15 @@ class DetailNotePage extends StatelessWidget {
     final TextEditingController contentController =
         TextEditingController(text: note['content']);
 
+    Future<void> deleteNote() async {
+      await FirebaseFirestore.instance
+          .collection('notes')
+          .doc(note['id'])
+          .delete();
+      onUpdate(); // Refresh notes list in the previous screen
+      Navigator.pop(context); // Go back to the previous screen
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -40,6 +49,37 @@ class DetailNotePage extends StatelessWidget {
               });
               onUpdate(); // Refresh notes list
               Navigator.pop(context);
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.delete,
+              color: Colors.red,
+            ),
+            onPressed: () async {
+              // Konfirmasi sebelum menghapus
+              bool? confirmDelete = await showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text('Hapus Catatan'),
+                  content:
+                      Text('Apakah Anda yakin ingin menghapus catatan ini?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: Text('Batal'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: Text('Hapus'),
+                    ),
+                  ],
+                ),
+              );
+
+              if (confirmDelete == true) {
+                deleteNote(); // Panggil fungsi deleteNote jika dikonfirmasi
+              }
             },
           ),
         ],
