@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intermediate_mobile_amcc24/pages/detai_note_page.dart';
+import 'package:intermediate_mobile_amcc24/shared/themes/theme.dart';
 import 'add_note_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -70,10 +71,17 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Notes App'),
+        backgroundColor: primaryColor,
+        title: Text(
+          'Notes App',
+          style: whiteColorTextStyle,
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: Icon(
+              Icons.logout,
+              color: whiteColor,
+            ),
             onPressed: logout,
           ),
         ],
@@ -81,7 +89,12 @@ class _HomePageState extends State<HomePage> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: notes.isEmpty
-            ? Center(child: Text('Belum ada note'))
+            ? Center(
+                child: Text(
+                  'Belum ada note',
+                  style: blackColorTextStyle,
+                ),
+              )
             : GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2, // Menampilkan 2 item per baris
@@ -101,16 +114,19 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Text(
                               notes[index]['title'],
-                              style: TextStyle(
+                              style: blackColorTextStyle.copyWith(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
-                            SizedBox(height: 5),
+                            const SizedBox(height: 8),
                             Text(
                               notes[index]['content'],
+                              style: blackColorTextStyle.copyWith(
+                                fontSize: 12,
+                              ),
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -123,8 +139,12 @@ class _HomePageState extends State<HomePage> {
               ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: primaryColor,
         onPressed: () => openAddNotePage(context),
-        child: Icon(Icons.add),
+        child: Icon(
+          Icons.add,
+          color: whiteColor,
+        ),
       ),
     );
   }
