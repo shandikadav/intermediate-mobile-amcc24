@@ -1,6 +1,7 @@
-  import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:intermediate_mobile_amcc24/pages/add_note_page.dart';
 import 'package:intermediate_mobile_amcc24/pages/detai_note_page.dart';
+import 'package:intermediate_mobile_amcc24/shared/themes/theme.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,7 +15,8 @@ class _HomePageState extends State<HomePage> {
     {
       'date': '28 May',
       'title': 'Task Management App Ui Design',
-      'content': 'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used.',
+      'content':
+          'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used.',
       'status': 'Just Now',
       'isTask': false,
     },
@@ -67,108 +69,120 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: primaryColor,
         elevation: 0,
-        title: const Text(
-          'Hello,\nMy Notes',
+        title: Text(
+          'Notes App',
           style: TextStyle(
-            color: Colors.black,
-            fontSize: 28,
+            color: whiteColor,
+            fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.filter_list, color: Colors.black),
+            icon: Icon(
+              Icons.filter_list,
+              color: whiteColor,
+            ),
             onPressed: () {},
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search Here',
-                prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
-                filled: true,
-                fillColor: Colors.grey[200],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              TextField(
+                decoration: InputDecoration(
+                  hintText: 'Search Here',
+                  prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: notes.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () => openNotePage(context, notes[index]),
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 2,
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              notes[index]['date'],
-                              style: const TextStyle(
-                                color: Colors.orange,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              notes[index]['title'],
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            if (notes[index]['isTask'])
-                              ...notes[index]['content'].map<Widget>((task) {
-                                bool isCompleted = notes[index]['completedTasks'].contains(task);
-                                return Row(
-                                  children: [
-                                    Checkbox(value: isCompleted, onChanged: (val) {}),
-                                    Text(task),
-                                  ],
-                                );
-                              }).toList()
-                            else
+              const SizedBox(height: 20),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: notes.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () => openNotePage(context, notes[index]),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 2,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               Text(
-                                notes[index]['content'],
-                                style: const TextStyle(color: Colors.black54),
+                                notes[index]['date'],
+                                style: const TextStyle(
+                                  color: Colors.orange,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            const SizedBox(height: 5),
-                            Text(
-                              notes[index]['status'],
-                              style: const TextStyle(color: Colors.green),
-                            ),
-                          ],
+                              const SizedBox(height: 5),
+                              Text(
+                                notes[index]['title'],
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+                              if (notes[index]['isTask'])
+                                ...notes[index]['content'].map<Widget>((task) {
+                                  bool isCompleted = notes[index]
+                                          ['completedTasks']
+                                      .contains(task);
+                                  return Row(
+                                    children: [
+                                      Checkbox(
+                                          value: isCompleted,
+                                          onChanged: (val) {}),
+                                      Text(task),
+                                    ],
+                                  );
+                                }).toList()
+                              else
+                                Text(
+                                  notes[index]['content'],
+                                  style: const TextStyle(color: Colors.black54),
+                                ),
+                              const SizedBox(height: 5),
+                              Text(
+                                notes[index]['status'],
+                                style: const TextStyle(color: Colors.green),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => openAddNotePage(context),
-        backgroundColor: Colors.purple,
-        child: const Icon(Icons.add),
+        backgroundColor: primaryColor,
+        child: Icon(
+          Icons.add,
+          color: whiteColor,
+        ),
       ),
     );
   }
