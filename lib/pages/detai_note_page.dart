@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intermediate_mobile_amcc24/shared/themes/theme.dart';
 
 class DetailNotePage extends StatelessWidget {
   final Map<String, dynamic> note;
@@ -17,10 +18,17 @@ class DetailNotePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Note'),
+        backgroundColor: primaryColor,
+        title: Text(
+          'Edit Note',
+          style: whiteColorTextStyle,
+        ),
         actions: [
           IconButton(
-            icon: Icon(Icons.save),
+            icon: Icon(
+              Icons.save,
+              color: whiteColor,
+            ),
             onPressed: () {
               // Logic to update note in Firestore
               FirebaseFirestore.instance

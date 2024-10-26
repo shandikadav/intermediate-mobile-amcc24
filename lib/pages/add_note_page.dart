@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intermediate_mobile_amcc24/shared/themes/theme.dart';
 
 class AddNotePage extends StatelessWidget {
   final Function(String, String) onSave;
@@ -12,27 +13,47 @@ class AddNotePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add New Note'),
+        backgroundColor: primaryColor,
+        title: Text(
+          'Tambah Catatan',
+          style: whiteColorTextStyle,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
+        child: ListView(
           children: [
             TextField(
               controller: titleController,
-              decoration: InputDecoration(labelText: 'Title'),
+              decoration: InputDecoration(
+                labelText: 'Judul',
+                labelStyle: blackColorTextStyle.copyWith(
+                  fontWeight: FontWeight.w100,
+                ),
+              ),
             ),
             TextField(
               controller: contentController,
-              decoration: InputDecoration(labelText: 'Content'),
+              decoration: InputDecoration(
+                labelText: 'Note',
+                labelStyle: blackColorTextStyle.copyWith(
+                  fontWeight: FontWeight.w100,
+                ),
+              ),
               maxLines: 5,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 32),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: primaryColor,
+              ),
               onPressed: () {
                 onSave(titleController.text, contentController.text);
               },
-              child: Text('Save'),
+              child: Text(
+                'Simpan',
+                style: whiteColorTextStyle,
+              ),
             ),
           ],
         ),
