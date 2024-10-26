@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intermediate_mobile_amcc24/bloc/auth/auth_bloc.dart';
 import 'package:intermediate_mobile_amcc24/shared/themes/theme.dart';
 
 import '../routes/router.dart';
@@ -8,6 +10,9 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Menambahkan text editing controller
+    TextEditingController emailController = TextEditingController();
+    TextEditingController passwordController = TextEditingController();
     return Scaffold(
       body: SafeArea(
         child: ListView(children: [
@@ -67,6 +72,7 @@ class LoginPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         TextField(
+                          controller: emailController,
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: whiteColor,
@@ -91,6 +97,7 @@ class LoginPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         TextField(
+                          controller: passwordController,
                           obscureText: true,
                           decoration: InputDecoration(
                             filled: true,
@@ -115,7 +122,12 @@ class LoginPage extends StatelessWidget {
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () {
-                              router.goNamed(Routenames.home);
+                              context.read().add(
+                                    AuthEventLogin(
+                                      emailController.text,
+                                      passwordController.text,
+                                    ),
+                                  );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: primaryColor,
@@ -123,9 +135,29 @@ class LoginPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                             ),
-                            child: Text(
-                              'Login',
-                              style: whiteColorTextStyle.copyWith(fontSize: 14),
+                            child: BlocConsumer<AuthBloc, AuthState>(
+                              listener: (context, state) {
+                                if (state is AuthStateError) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(state.message),
+                                      duration: const Duration(seconds: 2),
+                                    ),
+                                  );
+                                } else if (state is AuthStateLogin) {
+                                  router.goNamed(Routenames.home);
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is AuthStateLoading) {
+                                  return const CircularProgressIndicator();
+                                }
+                                return Text(
+                                  'Login',
+                                  style: whiteColorTextStyle.copyWith(
+                                      fontSize: 14),
+                                );
+                              },
                             ),
                           ),
                         ),
@@ -141,10 +173,12 @@ class LoginPage extends StatelessWidget {
                             icon: Image.asset(
                               'lib/shared/assets/super g (2).png',
                             ),
-                            label: Text('Masuk Dengan Google',
-                                style: blackColorTextStyle.copyWith(
-                                  fontSize: 14,
-                                )),
+                            label: Text(
+                              'Masuk Dengan Google',
+                              style: blackColorTextStyle.copyWith(
+                                fontSize: 14,
+                              ),
+                            ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
